@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Monday Night Football — Team Sheet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gold: #f4d35e;
+    --gold-deep: #c9a227;
+    --gold-soft: #ffe98a;
+    --bg-1: #050912;
+    --bg-2: #0b1226;
+    --red: #d72638;
+    --red-deep: #8a1421;
+    --blue: #1c6ee0;
+    --blue-deep: #0a3d8f;
+    --pitch-1: #0e6b3a;
+    --pitch-2: #0a5a30;
+    --line: rgba(255,255,255,0.85);
+  }
+
+  html, body {
+    background: radial-gradient(ellipse at top, #0e1a3a 0%, var(--bg-1) 60%, #000 100%);
+    color: #fff;
+    font-family: 'Rajdhani', system-ui, sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: "";
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(circle at 15% 20%, rgba(244,211,94,0.12), transparent 40%),
+      radial-gradient(circle at 85% 80%, rgba(28,110,224,0.12), transparent 40%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrap {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 32px 24px 64px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* HEADER */
+  .header {
+    text-align: center;
+    margin-bottom: 28px;
+    padding: 20px 12px 24px;
+    border-bottom: 1px solid rgba(244,211,94,0.25);
+  }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    letter-spacing: 4px;
+    color: var(--gold);
+    font-size: 13px;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border: 1px solid rgba(244,211,94,0.5);
+    border-radius: 2px;
+    background: rgba(244,211,94,0.05);
+  }
+  .badge::before, .badge::after {
+    content: "";
+    width: 6px; height: 6px;
+    background: var(--gold);
+    transform: rotate(45deg);
+  }
+  h1 {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(34px, 5vw, 56px);
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin: 14px 0 6px;
+    text-transform: uppercase;
+    background: linear-gradient(180deg, #fff 0%, var(--gold-soft) 50%, var(--gold-deep) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .sub {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 14px;
+    letter-spacing: 6px;
+    color: rgba(255,255,255,0.6);
+    text-transform: uppercase;
+  }
+
+  /* SCORE STRIP / VS */
+  .vs-strip {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 24px;
+    margin: 24px 0 20px;
+    padding: 16px 24px;
+    background: linear-gradient(90deg, rgba(215,38,56,0.18), rgba(0,0,0,0.4) 50%, rgba(28,110,224,0.18));
+    border: 1px solid rgba(244,211,94,0.25);
+    border-radius: 4px;
+  }
+  .team-tag {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    font-size: clamp(20px, 2.4vw, 30px);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+  .team-tag.red { color: #ff5c6c; text-align: left; }
+  .team-tag.blue { color: #6aa9ff; text-align: right; }
+  .team-tag .dot {
+    display: inline-block;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    margin: 0 8px;
+    vertical-align: middle;
+  }
+  .team-tag.red .dot { background: var(--red); box-shadow: 0 0 12px var(--red); }
+  .team-tag.blue .dot { background: var(--blue); box-shadow: 0 0 12px var(--blue); }
+  .vs {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: clamp(28px, 4vw, 44px);
+    color: var(--gold);
+    letter-spacing: 4px;
+    text-shadow: 0 0 20px rgba(244,211,94,0.4);
+  }
+
+  /* PITCH */
+  .pitch-frame {
+    position: relative;
+    border: 2px solid var(--gold);
+    border-radius: 6px;
+    padding: 12px;
+    background: linear-gradient(180deg, #0a1530 0%, #050912 100%);
+    box-shadow:
+      0 0 0 1px rgba(244,211,94,0.2) inset,
+      0 20px 60px rgba(0,0,0,0.6);
+  }
+
+  .pitch {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 4px;
+    background:
+      repeating-linear-gradient(
+        90deg,
+        var(--pitch-1) 0 8%,
+        var(--pitch-2) 8% 16%
+      );
+    overflow: hidden;
+    box-shadow: inset 0 0 80px rgba(0,0,0,0.55);
+  }
+
+  /* Pitch lines */
+  .pitch::before {
+    content: "";
+    position: absolute; inset: 2.5%;
+    border: 2px solid var(--line);
+    border-radius: 2px;
+    pointer-events: none;
+  }
+  .center-line {
+    position: absolute;
+    top: 2.5%; bottom: 2.5%;
+    left: 50%;
+    width: 2px;
+    background: var(--line);
+    transform: translateX(-50%);
+  }
+  .center-circle {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 18%; aspect-ratio: 1;
+    border: 2px solid var(--line);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .center-spot {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 8px; height: 8px;
+    background: var(--line);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .goal-area {
+    position: absolute;
+    top: 50%;
+    width: 8%;
+    height: 50%;
+    border: 2px solid var(--line);
+    transform: translateY(-50%);
+  }
+  .goal-area.left { left: 2.5%; border-left: none; }
+  .goal-area.right { right: 2.5%; border-right: none; }
+  .goal-box {
+    position: absolute;
+    top: 50%;
+    width: 4%;
+    height: 26%;
+    border: 2px solid var(--line);
+    transform: translateY(-50%);
+  }
+  .goal-box.left { left: 2.5%; border-left: none; }
+  .goal-box.right { right: 2.5%; border-right: none; }
+  .goal-net {
+    position: absolute;
+    top: 50%;
+    width: 1.5%;
+    height: 18%;
+    background: repeating-linear-gradient(
+      45deg,
+      rgba(255,255,255,0.4) 0 2px,
+      transparent 2px 6px
+    ), rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.6);
+    transform: translateY(-50%);
+  }
+  .goal-net.left { left: 1%; }
+  .goal-net.right { right: 1%; }
+
+  /* Player cards on pitch */
+  .player {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    width: clamp(78px, 9vw, 130px);
+    z-index: 2;
+  }
+  .card {
+    position: relative;
+    aspect-ratio: 3 / 4.2;
+    border-radius: 8px;
+    padding: 8px 6px 10px;
+    text-align: center;
+    color: #1a1206;
+    font-family: 'Oswald', sans-serif;
+    box-shadow:
+      0 6px 18px rgba(0,0,0,0.55),
+      0 0 0 1px rgba(0,0,0,0.4);
+    overflow: hidden;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .card:hover {
+    transform: translateY(-4px) scale(1.04);
+    box-shadow: 0 12px 26px rgba(0,0,0,0.7), 0 0 0 1px rgba(0,0,0,0.5);
+  }
+
+  /* Gold UT card style */
+  .card.gold {
+    background:
+      radial-gradient(circle at 50% 0%, #fff7c2 0%, #fbd96a 30%, #d9a82a 70%, #8c6b14 100%);
+  }
+  .card.gold::before {
+    content: "";
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(180deg, transparent 55%, rgba(0,0,0,0.18) 100%),
+      repeating-linear-gradient(115deg, rgba(255,255,255,0.0) 0 6px, rgba(255,255,255,0.08) 6px 7px);
+    pointer-events: none;
+  }
+  .card.gold::after {
+    content: "";
+    position: absolute;
+    inset: 3px;
+    border: 1px solid rgba(255,255,255,0.55);
+    border-radius: 6px;
+    pointer-events: none;
+  }
+
+  /* Team accent strips on bottom of card */
+  .card .team-strip {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 18%;
+    z-index: 2;
+  }
+  .card.red .team-strip {
+    background: linear-gradient(180deg, transparent, var(--red) 50%, var(--red-deep));
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.4);
+  }
+  .card.blue .team-strip {
+    background: linear-gradient(180deg, transparent, var(--blue) 50%, var(--blue-deep));
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.4);
+  }
+
+  .player-portrait {
+    position: relative;
+    z-index: 1;
+    width: 64%;
+    aspect-ratio: 1;
+    margin: 14% auto 4%;
+    border-radius: 50%;
+    background: linear-gradient(180deg, rgba(255,255,255,0.5), rgba(0,0,0,0.15));
+    box-shadow:
+      inset 0 0 0 2px rgba(255,255,255,0.45),
+      inset 0 -8px 14px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: clamp(16px, 2.2vw, 28px);
+    color: #2a1d05;
+    letter-spacing: 1px;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.5);
+  }
+
+  .player-name {
+    position: relative;
+    z-index: 3;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    font-size: clamp(9px, 1.05vw, 13px);
+    line-height: 1.05;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #fff;
+    padding: 0 4px;
+    margin-top: auto;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+  }
+
+  /* Team A (Red) positions — left side of pitch */
+  .team-a .p1 { top: 50%; left: 12%; }    /* keeper area */
+  .team-a .p2 { top: 22%; left: 26%; }
+  .team-a .p3 { top: 78%; left: 26%; }
+  .team-a .p4 { top: 32%; left: 40%; }
+  .team-a .p5 { top: 68%; left: 40%; }
+
+  /* Team B (Blue) positions — right side of pitch */
+  .team-b .p1 { top: 50%; left: 88%; }
+  .team-b .p2 { top: 22%; left: 74%; }
+  .team-b .p3 { top: 78%; left: 74%; }
+  .team-b .p4 { top: 32%; left: 60%; }
+  .team-b .p5 { top: 68%; left: 60%; }
+
+  /* ROSTER PANELS */
+  .rosters {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-top: 26px;
+  }
+  .roster {
+    background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+    border: 1px solid rgba(244,211,94,0.2);
+    border-radius: 6px;
+    padding: 18px 20px;
+  }
+  .roster h2 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    font-size: 22px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .roster.red h2 { color: #ff7782; }
+  .roster.blue h2 { color: #7eb6ff; }
+  .roster h2 .pip {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+  }
+  .roster.red h2 .pip { background: var(--red); box-shadow: 0 0 8px var(--red); }
+  .roster.blue h2 .pip { background: var(--blue); box-shadow: 0 0 8px var(--blue); }
+  .roster ul {
+    list-style: none;
+    display: grid;
+    gap: 6px;
+  }
+  .roster li {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+    font-size: 17px;
+    letter-spacing: 1px;
+    padding: 8px 12px;
+    background: rgba(255,255,255,0.03);
+    border-left: 3px solid transparent;
+    border-radius: 2px;
+    transition: background 0.2s ease;
+  }
+  .roster li:hover { background: rgba(255,255,255,0.06); }
+  .roster.red li { border-left-color: var(--red); }
+  .roster.blue li { border-left-color: var(--blue); }
+
+  /* FOOTER */
+  .footer {
+    text-align: center;
+    margin-top: 32px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(244,211,94,0.15);
+    font-family: 'Rajdhani', sans-serif;
+    color: rgba(255,255,255,0.45);
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .footer .small { opacity: 0.6; font-size: 11px; margin-top: 4px; letter-spacing: 1.5px; }
+
+  /* Mobile */
+  @media (max-width: 720px) {
+    .rosters { grid-template-columns: 1fr; }
+    .player { width: 64px; }
+    .player-name { font-size: 8px; }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+
+    <header class="header">
+      <span class="badge">Monday Night Football</span>
+      <h1>Match Day Lineups</h1>
+      <div class="sub">Indoor • 5 v 5</div>
+    </header>
+
+    <div class="vs-strip">
+      <div class="team-tag red"><span class="dot"></span>Team Red</div>
+      <div class="vs">VS</div>
+      <div class="team-tag blue">Team Blue<span class="dot"></span></div>
+    </div>
+
+    <div class="pitch-frame">
+      <div class="pitch" aria-label="Indoor football pitch">
+        <div class="goal-net left"></div>
+        <div class="goal-net right"></div>
+        <div class="goal-area left"></div>
+        <div class="goal-area right"></div>
+        <div class="goal-box left"></div>
+        <div class="goal-box right"></div>
+        <div class="center-line"></div>
+        <div class="center-circle"></div>
+        <div class="center-spot"></div>
+
+        <!-- Team A (Red) -->
+        <div class="team-a">
+          <div class="player p1">
+            <div class="card gold red">
+              <div class="player-portrait">AG</div>
+              <div class="player-name">Andy Green</div>
+              <div class="team-strip"></div>
+            </div>
+          </div>
+          <div class="player p2">
+            <div class="card gold red">
+              <div class="player-portrait">SA</div>
+              <div class="player-name">Sam Avery</div>
+              <div class="team-strip"></div>
+            </div>
+          </div>
+          <div class="player p3">
+            <div class="card gold red">
+              <div class="player-portrait">MW</div>
+              <div class="player-name">Matt Whitton</div>
+              <div class="team-strip"></div>
+            </div>
+          </div>
+          <div class="player p4">
+            <div class="card gold red">
+              <div class="player-portrait">DD</div>
+              <div class="player-name">Danny Dale-Tucker</div>
+              <div class="team-strip"></div>
+            </div>
+          </div>
+          <div class="player p5">
+            <div class="card gold red">
+              <div class="player-portrait">MH</div>
+              <div class="player-name">Michael Hepburn</div>
+              <div class="team-strip"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Team B (Blue) -->
+        <div class="team-b">
+          <div class="player p1">
+            <div class="card gold blue">
+              <div class="player-portrait">RS</div>
+              <div class="player-name">Rob Smith</div>
+              <div class="team-strip"></div>
+            </div>
+          </div>
+          <div class="player p2">
+            <div class="card gold blue">
+              <div class="player-portrait">KH</div>
+              <div class="player-name">Kieran Hollingsworth</div>
+              <div class="team-strip"></div>
+            </div>
+          </div>
+          <div class="player p3">
+            <div class="card gold blue">
+              <div class="player-portrait">JP</div>
+              <div class="player-name">Jack Preston</div>
+              <div class="team-strip"></div>
+            </div>
+          </div>
+          <div class="player p4">
+            <div class="card gold blue">
+              <div class="player-portrait">DM</div>
+              <div class="player-name">Dan Marsh</div>
+              <div class="team-strip"></div>
+            </div>
+          </div>
+          <div class="player p5">
+            <div class="card gold blue">
+              <div class="player-portrait">DT</div>
+              <div class="player-name">Darren Tuckett</div>
+              <div class="team-strip"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="rosters">
+      <div class="roster red">
+        <h2><span class="pip"></span>Team Red</h2>
+        <ul>
+          <li>Andy Green</li>
+          <li>Sam Avery</li>
+          <li>Matt Whitton</li>
+          <li>Danny Dale-Tucker</li>
+          <li>Michael Hepburn</li>
+        </ul>
+      </div>
+      <div class="roster blue">
+        <h2><span class="pip"></span>Team Blue</h2>
+        <ul>
+          <li>Rob Smith</li>
+          <li>Kieran Hollingsworth</li>
+          <li>Jack Preston</li>
+          <li>Dan Marsh</li>
+          <li>Darren Tuckett</li>
+        </ul>
+      </div>
+    </div>
+
+    <footer class="footer">
+      Monday Night Football
+      <div class="small">Rotate keepers • Mix it up • Have a good game</div>
+    </footer>
+
+  </div>
+</body>
+</html>
