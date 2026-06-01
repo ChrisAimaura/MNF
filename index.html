@@ -333,19 +333,21 @@
     text-shadow: 0 1px 2px rgba(0,0,0,0.5);
   }
 
-  /* Team A (Red) positions — left side of pitch */
-  .team-a .p1 { top: 50%; left: 12%; }    /* keeper area */
-  .team-a .p2 { top: 22%; left: 26%; }
-  .team-a .p3 { top: 78%; left: 26%; }
-  .team-a .p4 { top: 32%; left: 40%; }
-  .team-a .p5 { top: 68%; left: 40%; }
+  /* Team A (Red) positions — left side of pitch (6 players) */
+  .team-a .p1 { top: 50%; left: 8%; }    /* keeper area */
+  .team-a .p2 { top: 26%; left: 20%; }
+  .team-a .p3 { top: 74%; left: 20%; }
+  .team-a .p4 { top: 30%; left: 35%; }
+  .team-a .p5 { top: 70%; left: 35%; }
+  .team-a .p6 { top: 50%; left: 44%; }
 
-  /* Team B (Blue) positions — right side of pitch */
-  .team-b .p1 { top: 50%; left: 88%; }
-  .team-b .p2 { top: 22%; left: 74%; }
-  .team-b .p3 { top: 78%; left: 74%; }
-  .team-b .p4 { top: 32%; left: 60%; }
-  .team-b .p5 { top: 68%; left: 60%; }
+  /* Team B (Blue) positions — right side of pitch (6 players) */
+  .team-b .p1 { top: 50%; left: 92%; }
+  .team-b .p2 { top: 26%; left: 80%; }
+  .team-b .p3 { top: 74%; left: 80%; }
+  .team-b .p4 { top: 30%; left: 65%; }
+  .team-b .p5 { top: 70%; left: 65%; }
+  .team-b .p6 { top: 50%; left: 56%; }
 
   /* ROSTER PANELS */
   .rosters {
@@ -429,7 +431,7 @@
     <header class="header">
       <span class="badge">Monday Night Football</span>
       <h1>Match Day Lineups</h1>
-      <div class="sub">Indoor • 5 v 5</div>
+      <div class="sub">Indoor • 6 v 6</div>
     </header>
 
     <div class="vs-strip">
@@ -454,36 +456,43 @@
         <div class="team-a">
           <div class="player p1">
             <div class="card gold red">
-              <div class="player-portrait">CW</div>
-              <div class="player-name">Chris Wheeler</div>
+              <div class="player-portrait">DM</div>
+              <div class="player-name">Dan Marsh</div>
               <div class="team-strip"></div>
             </div>
           </div>
           <div class="player p2">
             <div class="card gold red">
-              <div class="player-portrait">SA</div>
-              <div class="player-name">Sam Avery</div>
+              <div class="player-portrait">MAT</div>
+              <div class="player-name">Matt Whitton</div>
               <div class="team-strip"></div>
             </div>
           </div>
           <div class="player p3">
             <div class="card gold red">
-              <div class="player-portrait">LW</div>
-              <div class="player-name">Luke Williams</div>
+              <div class="player-portrait">AG</div>
+              <div class="player-name">Andy Green</div>
               <div class="team-strip"></div>
             </div>
           </div>
           <div class="player p4">
             <div class="card gold red">
-              <div class="player-portrait">DD</div>
-              <div class="player-name">Danny Dale-Tucker</div>
+              <div class="player-portrait">MAR</div>
+              <div class="player-name">Marcus Weeks</div>
               <div class="team-strip"></div>
             </div>
           </div>
           <div class="player p5">
             <div class="card gold red">
-              <div class="player-portrait">DB</div>
-              <div class="player-name">Dan's Brother</div>
+              <div class="player-portrait">MH</div>
+              <div class="player-name">Michael Hepburn</div>
+              <div class="team-strip"></div>
+            </div>
+          </div>
+          <div class="player p6">
+            <div class="card gold red">
+              <div class="player-portrait">MM</div>
+              <div class="player-name">Michele Martucci</div>
               <div class="team-strip"></div>
             </div>
           </div>
@@ -493,36 +502,43 @@
         <div class="team-b">
           <div class="player p1">
             <div class="card gold blue">
-              <div class="player-portrait">AG</div>
-              <div class="player-name">Andy Green</div>
+              <div class="player-portrait">KH</div>
+              <div class="player-name">Kieran Hollingsworth</div>
               <div class="team-strip"></div>
             </div>
           </div>
           <div class="player p2">
             <div class="card gold blue">
-              <div class="player-portrait">MW</div>
-              <div class="player-name">Matt Whitton</div>
+              <div class="player-portrait">LW</div>
+              <div class="player-name">Luke Williams</div>
               <div class="team-strip"></div>
             </div>
           </div>
           <div class="player p3">
+            <div class="card gold blue">
+              <div class="player-portrait">SA</div>
+              <div class="player-name">Sam Avery</div>
+              <div class="team-strip"></div>
+            </div>
+          </div>
+          <div class="player p4">
+            <div class="card gold blue">
+              <div class="player-portrait">DD</div>
+              <div class="player-name">Danny Dale-Tucker</div>
+              <div class="team-strip"></div>
+            </div>
+          </div>
+          <div class="player p5">
             <div class="card gold blue">
               <div class="player-portrait">DT</div>
               <div class="player-name">Darren Tuckett</div>
               <div class="team-strip"></div>
             </div>
           </div>
-          <div class="player p4">
+          <div class="player p6">
             <div class="card gold blue">
-              <div class="player-portrait">MH</div>
-              <div class="player-name">Michael Hepburn</div>
-              <div class="team-strip"></div>
-            </div>
-          </div>
-          <div class="player p5">
-            <div class="card gold blue">
-              <div class="player-portrait">UC</div>
-              <div class="player-name">US Chris</div>
+              <div class="player-portrait">CW</div>
+              <div class="player-name">Chris Wheeler</div>
               <div class="team-strip"></div>
             </div>
           </div>
@@ -535,21 +551,23 @@
       <div class="roster red">
         <h2><span class="pip"></span>Team Red</h2>
         <ul>
-          <li>Chris Wheeler</li>
-          <li>Sam Avery</li>
-          <li>Luke Williams</li>
-          <li>Danny Dale-Tucker</li>
-          <li>Dan's Brother</li>
+          <li>Dan Marsh</li>
+          <li>Matt Whitton</li>
+          <li>Andy Green</li>
+          <li>Marcus Weeks</li>
+          <li>Michael Hepburn</li>
+          <li>Michele Martucci</li>
         </ul>
       </div>
       <div class="roster blue">
         <h2><span class="pip"></span>Team Blue</h2>
         <ul>
-          <li>Andy Green</li>
-          <li>Matt Whitton</li>
+          <li>Kieran Hollingsworth</li>
+          <li>Luke Williams</li>
+          <li>Sam Avery</li>
+          <li>Danny Dale-Tucker</li>
           <li>Darren Tuckett</li>
-          <li>Michael Hepburn</li>
-          <li>US Chris</li>
+          <li>Chris Wheeler</li>
         </ul>
       </div>
     </div>
