@@ -1,84 +1,208 @@
 <!DOCTYPE html>
-<html lang="en-US" dir="ltr">
+<html lang="en-GB" dir="ltr">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Monday Night Football</title>
-  <meta name="color-scheme" content="light">
-  <style>
-    :root {
-      --color-bg: #ffffff; --color-fg: #111827;
-      --color-muted: #6b7280; --color-accent: #2563eb;
-      --color-border: #e5e7eb;
-      color-scheme: light;
-      --space: 1rem;
-      --max-width: 56rem;
-    }
-    /* Off-preview viewers on a dark OS get dark colors via this query. The
-       preview shim overrides documentElement.style.colorScheme directly and
-       does not consult the media query, so this is preview-inert. */
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --color-bg: #0b1220; --color-fg: #f3f4f6;
-        --color-muted: #9ca3af; --color-accent: #60a5fa;
-        --color-border: #1f2937;
-      }
-    }
-    * { box-sizing: border-box; }
-    html, body { margin: 0; padding: 0; }
-    body {
-      background: var(--color-bg);
-      color: var(--color-fg);
-      font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      line-height: 1.6;
-      text-align: start;
-    }
-    .page {
-      max-width: var(--max-width);
-      margin-inline: auto;
-      padding-block: calc(var(--space) * 2);
-      padding-inline: var(--space);
-    }
-    h1, h2, h3 { line-height: 1.25; }
-    a { color: var(--color-accent); }
-    .muted { color: var(--color-muted); }
-    hr { border: 0; border-block-start: 1px solid var(--color-border); margin-block: var(--space); }
-    table { border-collapse: collapse; width: 100%; }
-    th, td {
-      text-align: start;
-      padding: 0.5rem 0.75rem;
-      border-block-end: 1px solid var(--color-border);
-    }
-    th { color: var(--color-muted); font-weight: 600; }
-    @media print {
-      :root {
-        --color-bg: #fff; --color-fg: #000;
-        --color-muted: #555; --color-border: #999;
-      }
-      @page { margin: 0.75in; }
-      tr, td, th { page-break-inside: avoid; }
-      .no-print { display: none !important; }
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark light">
+<title>Monday Night Football — Red vs Blue</title>
+<style>
+  :root {
+    --bg:#0a0e1a; --panel:#111726; --ink:#f4f7ff; --muted:#9fb0c8;
+    --line:rgba(255,255,255,.78); --grassA:#1f7a43; --grassB:#1a6c3b;
+    --red:#ef4444; --blue:#3b82f6;
+  }
+  @media (prefers-color-scheme: light) { :root { --bg:#0a0e1a; --ink:#f4f7ff; } }
+  * { box-sizing:border-box; }
+  body {
+    margin:0; background:radial-gradient(1400px 700px at 50% -10%, #15203a, var(--bg));
+    color:var(--ink); font-family:"Segoe UI",system-ui,-apple-system,sans-serif;
+    padding:24px 16px 56px;
+  }
+  .wrap { max-width:1180px; margin-inline:auto; }
+  header { text-align:center; margin-bottom:16px; }
+  .kicker { letter-spacing:.32em; font-size:13px; color:var(--muted); font-weight:700; }
+  h1 { margin:6px 0 2px; font-size:38px; font-weight:900; letter-spacing:.02em;
+    background:linear-gradient(90deg,#ff6a6a,#fff,#6aa8ff);
+    -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .sub { color:var(--muted); font-size:15px; }
+  .scorebar { display:flex; align-items:center; justify-content:center; gap:18px;
+    margin:14px auto 20px; max-width:640px; }
+  .team-badge { flex:1; background:var(--panel); border:1px solid rgba(255,255,255,.08);
+    border-radius:14px; padding:14px 16px; display:flex; align-items:center; gap:12px; }
+  .team-badge.blue { flex-direction:row-reverse; text-align:end; }
+  .team-badge .dot { width:40px;height:40px;border-radius:50%;flex:none;
+    display:grid;place-items:center;font-weight:900;font-size:17px;color:#fff; }
+  .team-badge.red  .dot { background:linear-gradient(135deg,#ff7a7a,#dc2626);
+    box-shadow:0 0 16px rgba(239,68,68,.7); }
+  .team-badge.blue .dot { background:linear-gradient(135deg,#7aa8ff,#2563eb);
+    box-shadow:0 0 16px rgba(59,130,246,.7); }
+  .team-badge .tn { font-weight:800; font-size:17px; }
+  .vs { font-weight:900; color:var(--muted); font-size:14px; }
+
+  .pitch {
+    container-type:inline-size; position:relative; width:100%; aspect-ratio:16/9;
+    border-radius:18px; overflow:hidden; border:2px solid rgba(255,255,255,.12);
+    background:repeating-linear-gradient(90deg, var(--grassA) 0 10%, var(--grassB) 10% 20%);
+    box-shadow:0 24px 70px rgba(0,0,0,.55);
+  }
+  .markings { position:absolute; inset:0; pointer-events:none; }
+  .markings .border { position:absolute; inset:16px; border:2px solid var(--line); border-radius:6px; }
+  .markings .half { position:absolute; top:16px; bottom:16px; left:50%; width:2px; background:var(--line); }
+  .markings .circle { position:absolute; top:50%; left:50%; height:42%; aspect-ratio:1;
+    transform:translate(-50%,-50%); border:2px solid var(--line); border-radius:50%; }
+  .markings .spot { position:absolute; top:50%; left:50%; width:7px; height:7px;
+    transform:translate(-50%,-50%); background:var(--line); border-radius:50%; }
+  .markings .box { position:absolute; top:50%; transform:translateY(-50%);
+    width:11%; height:54%; border:2px solid var(--line); }
+  .markings .box.left { left:16px; border-left:none; }
+  .markings .box.right { right:16px; border-right:none; }
+  .markings .six { position:absolute; top:50%; transform:translateY(-50%);
+    width:5%; height:30%; border:2px solid var(--line); }
+  .markings .six.left { left:16px; border-left:none; }
+  .markings .six.right { right:16px; border-right:none; }
+
+  .slot { position:absolute; transform:translate(-50%,-50%); }
+
+  .card {
+    width:11cqi; border-radius:10px 10px 12px 12px; padding:1.6cqi 0 1.4cqi;
+    position:relative; text-align:center; color:#2a1e05;
+    border:1px solid rgba(0,0,0,.25);
+    background:linear-gradient(160deg,#fceaa0 0%,#e9c65a 42%,#c79a2b 100%);
+  }
+  .slot.red  .card { box-shadow:0 0 26px 6px rgba(239,68,68,.9), 0 8px 16px rgba(0,0,0,.5); }
+  .slot.blue .card { box-shadow:0 0 26px 6px rgba(59,130,246,.95), 0 8px 16px rgba(0,0,0,.5); }
+  .slot.red  .avatar { box-shadow:inset 0 0 0 .35cqi rgba(220,38,38,.45); }
+  .slot.blue .avatar { box-shadow:inset 0 0 0 .35cqi rgba(37,99,235,.45); }
+
+  .avatar { width:5.6cqi; height:5.6cqi; margin:.3cqi auto .3cqi; border-radius:50%;
+    background:rgba(0,0,0,.14); display:grid; place-items:center;
+    font-weight:900; font-size:2.5cqi; color:rgba(0,0,0,.62); }
+  .name { border-top:1px solid rgba(0,0,0,.22); margin:.7cqi 1cqi 0; padding-top:.7cqi;
+    display:flex; flex-direction:column; line-height:1.1; }
+  .name .fn { font-size:1.35cqi; font-weight:600; opacity:.85; }
+  .name .sn { font-size:1.75cqi; font-weight:900; letter-spacing:.01em; word-break:break-word; }
+
+  .lineup { display:flex; gap:16px; margin-top:22px; }
+  .lu-col { flex:1; background:var(--panel); border:1px solid rgba(255,255,255,.08);
+    border-radius:14px; padding:16px 18px; }
+  .lu-col h3 { margin:0 0 10px; font-size:15px; letter-spacing:.06em; text-transform:uppercase;
+    padding-bottom:8px; border-bottom:2px solid; }
+  .lu-col.red  h3 { color:#ff8a8a; border-color:rgba(239,68,68,.5); }
+  .lu-col.blue h3 { color:#8ab4ff; border-color:rgba(59,130,246,.5); }
+  .lu-col ul { list-style:none; margin:0; padding:0; }
+  .lu-col li { display:flex; align-items:center; gap:10px; padding:7px 0; font-size:15px;
+    font-weight:600; border-bottom:1px solid rgba(255,255,255,.05); }
+  .lu-col li:last-child { border-bottom:none; }
+  .lu-col .ini { width:30px; height:30px; flex:none; border-radius:50%;
+    display:grid; place-items:center; font-size:12px; font-weight:900; color:#2a1e05;
+    background:linear-gradient(160deg,#fceaa0,#e9c65a 60%,#c79a2b); }
+  .lu-col.red  .ini { box-shadow:0 0 12px rgba(239,68,68,.7); }
+  .lu-col.blue .ini { box-shadow:0 0 12px rgba(59,130,246,.75); }
+
+  footer { text-align:center; color:var(--muted); font-size:12px; margin-top:20px; }
+</style>
 </head>
 <body>
-  <main class="page">
-  <header>
-    <h1>Monday Night Football</h1>
-<p class="muted">5-a-side Teamsheet</p>    <p class="muted">
- &middot; 8 June 2026    </p>
-  </header>
-  <hr>
-  <section>
-    <h2>Team A</h2>
-    <ul>
-<li>Chris Wheeler</li><li>Matt Whitton</li><li>Sam Avery</li><li>Danny Dale-Tucker</li><li>Darren Tuckett</li>    </ul>
-  </section>
-  <section>
-    <h2>Team B</h2>
-    <ul>
-<li>Andy Green</li><li>Michele Martucci</li><li>Jack Preston</li><li>Michael Hepburn</li><li>Dan Marsh</li>    </ul>
-  </section>
-  </main>
+  <div class="wrap">
+    <header>
+      <div class="kicker">MONDAY NIGHT FOOTBALL</div>
+      <h1>RED vs BLUE</h1>
+      <div class="sub">5-a-side · 8 June 2026</div>
+    </header>
+
+    <div class="scorebar">
+      <div class="team-badge red"><div class="dot">R</div><div class="tn">Team Red</div></div>
+      <div class="vs">VS</div>
+      <div class="team-badge blue"><div class="dot">B</div><div class="tn">Team Blue</div></div>
+    </div>
+
+    <div class="pitch">
+      <div class="markings">
+        <div class="border"></div>
+        <div class="half"></div>
+        <div class="circle"></div>
+        <div class="spot"></div>
+        <div class="box left"></div><div class="box right"></div>
+        <div class="six left"></div><div class="six right"></div>
+      </div>
+      <div class="slot red" style="top:50%;left:6%;">
+    <div class="card">
+      <div class="avatar">DT</div>
+      <div class="name">
+        <span class="fn">Darren</span>
+        <span class="sn">TUCKETT</span>
+      </div>
+    </div></div><div class="slot red" style="top:50%;left:19%;">
+    <div class="card">
+      <div class="avatar">DT</div>
+      <div class="name">
+        <span class="fn">Danny</span>
+        <span class="sn">DALE-TUCKER</span>
+      </div>
+    </div></div><div class="slot red" style="top:22%;left:33%;">
+    <div class="card">
+      <div class="avatar">MW</div>
+      <div class="name">
+        <span class="fn">Matt</span>
+        <span class="sn">WHITTON</span>
+      </div>
+    </div></div><div class="slot red" style="top:78%;left:33%;">
+    <div class="card">
+      <div class="avatar">SA</div>
+      <div class="name">
+        <span class="fn">Sam</span>
+        <span class="sn">AVERY</span>
+      </div>
+    </div></div><div class="slot red" style="top:50%;left:44%;">
+    <div class="card">
+      <div class="avatar">CW</div>
+      <div class="name">
+        <span class="fn">Chris</span>
+        <span class="sn">WHEELER</span>
+      </div>
+    </div></div><div class="slot blue" style="top:50%;left:56%;">
+    <div class="card">
+      <div class="avatar">AG</div>
+      <div class="name">
+        <span class="fn">Andy</span>
+        <span class="sn">GREEN</span>
+      </div>
+    </div></div><div class="slot blue" style="top:22%;left:67%;">
+    <div class="card">
+      <div class="avatar">MM</div>
+      <div class="name">
+        <span class="fn">Michele</span>
+        <span class="sn">MARTUCCI</span>
+      </div>
+    </div></div><div class="slot blue" style="top:78%;left:67%;">
+    <div class="card">
+      <div class="avatar">JP</div>
+      <div class="name">
+        <span class="fn">Jack</span>
+        <span class="sn">PRESTON</span>
+      </div>
+    </div></div><div class="slot blue" style="top:50%;left:81%;">
+    <div class="card">
+      <div class="avatar">DM</div>
+      <div class="name">
+        <span class="fn">Dan</span>
+        <span class="sn">MARSH</span>
+      </div>
+    </div></div><div class="slot blue" style="top:50%;left:94%;">
+    <div class="card">
+      <div class="avatar">MH</div>
+      <div class="name">
+        <span class="fn">Michael</span>
+        <span class="sn">HEPBURN</span>
+      </div>
+    </div></div>
+    </div>
+
+    <div class="lineup">
+      <div class="lu-col red"><h3>Team Red</h3><ul><li><span class="ini">DT</span>Darren Tuckett</li><li><span class="ini">DT</span>Danny Dale-Tucker</li><li><span class="ini">MW</span>Matt Whitton</li><li><span class="ini">SA</span>Sam Avery</li><li><span class="ini">CW</span>Chris Wheeler</li></ul></div><div class="lu-col blue"><h3>Team Blue</h3><ul><li><span class="ini">AG</span>Andy Green</li><li><span class="ini">MM</span>Michele Martucci</li><li><span class="ini">JP</span>Jack Preston</li><li><span class="ini">DM</span>Dan Marsh</li><li><span class="ini">MH</span>Michael Hepburn</li></ul></div>
+    </div>
+
+    <footer>Teams balanced for a fair game · Monday Night Football</footer>
+  </div>
 </body>
 </html>
