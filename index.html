@@ -11,7 +11,6 @@
     --line:rgba(255,255,255,.78); --grassA:#1f7a43; --grassB:#1a6c3b;
     --red:#ef4444; --blue:#3b82f6;
   }
-  @media (prefers-color-scheme: light) { :root { --bg:#0a0e1a; --ink:#f4f7ff; } }
   * { box-sizing:border-box; }
   body {
     margin:0; background:radial-gradient(1400px 700px at 50% -10%, #15203a, var(--bg));
@@ -61,26 +60,70 @@
   .markings .six.left { left:16px; border-left:none; }
   .markings .six.right { right:16px; border-right:none; }
 
-  .slot { position:absolute; transform:translate(-50%,-50%); }
+  .slot { position:absolute; transform:translate(-50%,-50%); z-index:2; }
 
+  /* ---- FUT-style player card ---- */
+  .slot.red  { --c1:#ff8585; --c2:#c81e1e; --edge1:#ffd9d9; --edge2:#7a0f0f;
+               --glow:rgba(239,68,68,.85); }
+  .slot.blue { --c1:#7fb0ff; --c2:#1d52d6; --edge1:#d9e6ff; --edge2:#0c2c78;
+               --glow:rgba(59,130,246,.9); }
+
+  /* shield silhouette: chamfered top corners, straight sides, flat-but-tapered base */
   .card {
-    width:11cqi; border-radius:10px 10px 12px 12px; padding:1.6cqi 0 1.4cqi;
-    position:relative; text-align:center; color:#2a1e05;
-    border:1px solid rgba(0,0,0,.25);
-    background:linear-gradient(160deg,#fceaa0 0%,#e9c65a 42%,#c79a2b 100%);
+    --shield: polygon(7% 0, 93% 0, 100% 6%, 100% 84%, 84% 100%, 16% 100%, 0 84%, 0 6%);
+    width:14.5cqi; aspect-ratio:83/112; position:relative;
+    clip-path:var(--shield);
+    background:linear-gradient(150deg, var(--edge1) 0%, var(--c1) 26%, var(--c2) 66%, var(--edge2) 100%);
+    filter:drop-shadow(0 0 1cqi var(--glow)) drop-shadow(0 6px 9px rgba(0,0,0,.55));
   }
-  .slot.red  .card { box-shadow:0 0 26px 6px rgba(239,68,68,.9), 0 8px 16px rgba(0,0,0,.5); }
-  .slot.blue .card { box-shadow:0 0 26px 6px rgba(59,130,246,.95), 0 8px 16px rgba(0,0,0,.5); }
-  .slot.red  .avatar { box-shadow:inset 0 0 0 .35cqi rgba(220,38,38,.45); }
-  .slot.blue .avatar { box-shadow:inset 0 0 0 .35cqi rgba(37,99,235,.45); }
+  /* inner face sits inside the gold/metal frame */
+  .face {
+    position:absolute; inset:.5cqi; clip-path:var(--shield); overflow:hidden;
+    background:
+      radial-gradient(125% 70% at 50% 16%, rgba(255,255,255,.40), rgba(255,255,255,0) 58%),
+      linear-gradient(162deg, var(--c1) 0%, var(--c2) 64%, #0a0e1a 122%);
+  }
+  /* faint diagonal sheen for the metallic look */
+  .face::before {
+    content:""; position:absolute; inset:0; pointer-events:none;
+    background:linear-gradient(118deg, rgba(255,255,255,.18) 0 18%, rgba(255,255,255,0) 34%);
+  }
+  /* darken the lower third so the name reads cleanly */
+  .face::after {
+    content:""; position:absolute; left:0; right:0; bottom:0; height:42%; pointer-events:none;
+    background:linear-gradient(to top, rgba(0,0,0,.45), rgba(0,0,0,0));
+  }
 
-  .avatar { width:5.6cqi; height:5.6cqi; margin:.3cqi auto .3cqi; border-radius:50%;
-    background:rgba(0,0,0,.14); display:grid; place-items:center;
-    font-weight:900; font-size:2.5cqi; color:rgba(0,0,0,.62); }
-  .name { border-top:1px solid rgba(0,0,0,.22); margin:.7cqi 1cqi 0; padding-top:.7cqi;
-    display:flex; flex-direction:column; line-height:1.1; }
-  .name .fn { font-size:1.35cqi; font-weight:600; opacity:.85; }
-  .name .sn { font-size:1.75cqi; font-weight:900; letter-spacing:.01em; word-break:break-word; }
+  /* team mark on the side (upper-left), echoing the FUT info column */
+  .badge {
+    position:absolute; top:6.5%; left:7.5%; z-index:4;
+    width:3.1cqi; height:3.1cqi; border-radius:50%;
+    display:grid; place-items:center; font-weight:900; font-size:1.55cqi; color:#fff;
+    background:linear-gradient(135deg, var(--c1), var(--c2));
+    border:.18cqi solid rgba(255,255,255,.55); box-shadow:0 0 .8cqi var(--glow);
+  }
+
+  /* player headshot fitted inside the shield */
+  .photo {
+    position:absolute; top:4%; left:5%; width:90%; height:62%; z-index:2;
+    object-fit:contain; object-position:center bottom;
+    filter:drop-shadow(0 3px 5px rgba(0,0,0,.5));
+  }
+  /* fallback shown only if the PNG is missing */
+  .initials {
+    position:absolute; top:4%; left:5%; width:90%; height:62%; z-index:1;
+    display:none; place-items:center; font-weight:900; font-size:6cqi;
+    color:rgba(255,255,255,.85); text-shadow:0 2px 6px rgba(0,0,0,.5);
+  }
+
+  .plate {
+    position:absolute; left:8%; right:8%; bottom:11%; z-index:3; text-align:center;
+    padding-top:.55cqi; border-top:.16cqi solid rgba(255,255,255,.5);
+  }
+  .plate .fn { display:block; font-size:1.35cqi; font-weight:600; letter-spacing:.08em;
+    text-transform:uppercase; color:rgba(255,255,255,.88); }
+  .plate .sn { display:block; font-size:2.05cqi; font-weight:900; line-height:1.05;
+    letter-spacing:.01em; color:#fff; word-break:break-word; text-shadow:0 1px 3px rgba(0,0,0,.55); }
 
   .lineup { display:flex; gap:16px; margin-top:22px; }
   .lu-col { flex:1; background:var(--panel); border:1px solid rgba(255,255,255,.08);
@@ -94,10 +137,9 @@
     font-weight:600; border-bottom:1px solid rgba(255,255,255,.05); }
   .lu-col li:last-child { border-bottom:none; }
   .lu-col .ini { width:30px; height:30px; flex:none; border-radius:50%;
-    display:grid; place-items:center; font-size:12px; font-weight:900; color:#2a1e05;
-    background:linear-gradient(160deg,#fceaa0,#e9c65a 60%,#c79a2b); }
-  .lu-col.red  .ini { box-shadow:0 0 12px rgba(239,68,68,.7); }
-  .lu-col.blue .ini { box-shadow:0 0 12px rgba(59,130,246,.75); }
+    display:grid; place-items:center; font-size:12px; font-weight:900; color:#fff; }
+  .lu-col.red  .ini { background:linear-gradient(135deg,#ff8585,#c81e1e); box-shadow:0 0 12px rgba(239,68,68,.6); }
+  .lu-col.blue .ini { background:linear-gradient(135deg,#7fb0ff,#1d52d6); box-shadow:0 0 12px rgba(59,130,246,.65); }
 
   footer { text-align:center; color:var(--muted); font-size:12px; margin-top:20px; }
 </style>
@@ -125,77 +167,106 @@
         <div class="box left"></div><div class="box right"></div>
         <div class="six left"></div><div class="six right"></div>
       </div>
+
       <div class="slot red" style="top:50%;left:6%;">
-    <div class="card">
-      <div class="avatar">DT</div>
-      <div class="name">
-        <span class="fn">Darren</span>
-        <span class="sn">TUCKETT</span>
+        <div class="card"><div class="face">
+          <div class="badge">R</div>
+          <div class="initials">DT</div>
+          <img class="photo" src="assets/img/darren-tuckett.png" alt="Darren Tuckett"
+               onerror="this.style.display='none';this.closest('.face').querySelector('.initials').style.display='grid';">
+          <div class="plate"><span class="fn">Darren</span><span class="sn">TUCKETT</span></div>
+        </div></div>
       </div>
-    </div></div><div class="slot red" style="top:50%;left:19%;">
-    <div class="card">
-      <div class="avatar">DT</div>
-      <div class="name">
-        <span class="fn">Danny</span>
-        <span class="sn">DALE-TUCKER</span>
+
+      <div class="slot red" style="top:50%;left:19%;">
+        <div class="card"><div class="face">
+          <div class="badge">R</div>
+          <div class="initials">DT</div>
+          <img class="photo" src="assets/img/danny-dale-tucker.png" alt="Danny Dale-Tucker"
+               onerror="this.style.display='none';this.closest('.face').querySelector('.initials').style.display='grid';">
+          <div class="plate"><span class="fn">Danny</span><span class="sn">DALE-TUCKER</span></div>
+        </div></div>
       </div>
-    </div></div><div class="slot red" style="top:22%;left:33%;">
-    <div class="card">
-      <div class="avatar">MW</div>
-      <div class="name">
-        <span class="fn">Matt</span>
-        <span class="sn">WHITTON</span>
+
+      <div class="slot red" style="top:22%;left:33%;">
+        <div class="card"><div class="face">
+          <div class="badge">R</div>
+          <div class="initials">MW</div>
+          <img class="photo" src="assets/img/matt-whitton.png" alt="Matt Whitton"
+               onerror="this.style.display='none';this.closest('.face').querySelector('.initials').style.display='grid';">
+          <div class="plate"><span class="fn">Matt</span><span class="sn">WHITTON</span></div>
+        </div></div>
       </div>
-    </div></div><div class="slot red" style="top:78%;left:33%;">
-    <div class="card">
-      <div class="avatar">SA</div>
-      <div class="name">
-        <span class="fn">Sam</span>
-        <span class="sn">AVERY</span>
+
+      <div class="slot red" style="top:78%;left:33%;">
+        <div class="card"><div class="face">
+          <div class="badge">R</div>
+          <div class="initials">SA</div>
+          <img class="photo" src="assets/img/sam-avery.png" alt="Sam Avery"
+               onerror="this.style.display='none';this.closest('.face').querySelector('.initials').style.display='grid';">
+          <div class="plate"><span class="fn">Sam</span><span class="sn">AVERY</span></div>
+        </div></div>
       </div>
-    </div></div><div class="slot red" style="top:50%;left:44%;">
-    <div class="card">
-      <div class="avatar">CW</div>
-      <div class="name">
-        <span class="fn">Chris</span>
-        <span class="sn">WHEELER</span>
+
+      <div class="slot red" style="top:50%;left:44%;">
+        <div class="card"><div class="face">
+          <div class="badge">R</div>
+          <div class="initials">CW</div>
+          <img class="photo" src="assets/img/chris-wheeler.png" alt="Chris Wheeler"
+               onerror="this.style.display='none';this.closest('.face').querySelector('.initials').style.display='grid';">
+          <div class="plate"><span class="fn">Chris</span><span class="sn">WHEELER</span></div>
+        </div></div>
       </div>
-    </div></div><div class="slot blue" style="top:50%;left:56%;">
-    <div class="card">
-      <div class="avatar">AG</div>
-      <div class="name">
-        <span class="fn">Andy</span>
-        <span class="sn">GREEN</span>
+
+      <div class="slot blue" style="top:50%;left:56%;">
+        <div class="card"><div class="face">
+          <div class="badge">B</div>
+          <div class="initials">AG</div>
+          <img class="photo" src="assets/img/andy-green.png" alt="Andy Green"
+               onerror="this.style.display='none';this.closest('.face').querySelector('.initials').style.display='grid';">
+          <div class="plate"><span class="fn">Andy</span><span class="sn">GREEN</span></div>
+        </div></div>
       </div>
-    </div></div><div class="slot blue" style="top:22%;left:67%;">
-    <div class="card">
-      <div class="avatar">MM</div>
-      <div class="name">
-        <span class="fn">Michele</span>
-        <span class="sn">MARTUCCI</span>
+
+      <div class="slot blue" style="top:22%;left:67%;">
+        <div class="card"><div class="face">
+          <div class="badge">B</div>
+          <div class="initials">MM</div>
+          <img class="photo" src="assets/img/michele-martucci.png" alt="Michele Martucci"
+               onerror="this.style.display='none';this.closest('.face').querySelector('.initials').style.display='grid';">
+          <div class="plate"><span class="fn">Michele</span><span class="sn">MARTUCCI</span></div>
+        </div></div>
       </div>
-    </div></div><div class="slot blue" style="top:78%;left:67%;">
-    <div class="card">
-      <div class="avatar">JP</div>
-      <div class="name">
-        <span class="fn">Jack</span>
-        <span class="sn">PRESTON</span>
+
+      <div class="slot blue" style="top:78%;left:67%;">
+        <div class="card"><div class="face">
+          <div class="badge">B</div>
+          <div class="initials">JP</div>
+          <img class="photo" src="assets/img/jack-preston.png" alt="Jack Preston"
+               onerror="this.style.display='none';this.closest('.face').querySelector('.initials').style.display='grid';">
+          <div class="plate"><span class="fn">Jack</span><span class="sn">PRESTON</span></div>
+        </div></div>
       </div>
-    </div></div><div class="slot blue" style="top:50%;left:81%;">
-    <div class="card">
-      <div class="avatar">DM</div>
-      <div class="name">
-        <span class="fn">Dan</span>
-        <span class="sn">MARSH</span>
+
+      <div class="slot blue" style="top:50%;left:81%;">
+        <div class="card"><div class="face">
+          <div class="badge">B</div>
+          <div class="initials">DM</div>
+          <img class="photo" src="assets/img/dan-marsh.png" alt="Dan Marsh"
+               onerror="this.style.display='none';this.closest('.face').querySelector('.initials').style.display='grid';">
+          <div class="plate"><span class="fn">Dan</span><span class="sn">MARSH</span></div>
+        </div></div>
       </div>
-    </div></div><div class="slot blue" style="top:50%;left:94%;">
-    <div class="card">
-      <div class="avatar">MH</div>
-      <div class="name">
-        <span class="fn">Michael</span>
-        <span class="sn">HEPBURN</span>
+
+      <div class="slot blue" style="top:50%;left:94%;">
+        <div class="card"><div class="face">
+          <div class="badge">B</div>
+          <div class="initials">MH</div>
+          <img class="photo" src="assets/img/michael-hepburn.png" alt="Michael Hepburn"
+               onerror="this.style.display='none';this.closest('.face').querySelector('.initials').style.display='grid';">
+          <div class="plate"><span class="fn">Michael</span><span class="sn">HEPBURN</span></div>
+        </div></div>
       </div>
-    </div></div>
     </div>
 
     <div class="lineup">
