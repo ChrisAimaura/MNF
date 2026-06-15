@@ -9,271 +9,221 @@
   :root {
     --bg:#0a0e1a; --panel:#111726; --ink:#f4f7ff; --muted:#9fb0c8;
     --line:rgba(255,255,255,.78); --grassA:#1f7a43; --grassB:#1a6c3b;
-    --red:#ef4444; --blue:#3b82f6;
   }
-  * { box-sizing:border-box; }
+  @media (prefers-color-scheme: light) { :root { --bg:#0a0e1a; --ink:#f4f7ff; } }
+  * { box-sizing:border-box; margin:0; padding:0; }
   body {
-    margin:0; background:radial-gradient(1400px 700px at 50% -10%, #15203a, var(--bg));
+    background:radial-gradient(1400px 700px at 50% -10%, #15203a, var(--bg));
     color:var(--ink); font-family:"Segoe UI",system-ui,-apple-system,sans-serif;
     padding:24px 16px 56px;
   }
   .wrap { max-width:1180px; margin-inline:auto; }
+
+  /* ── Header ── */
   header { text-align:center; margin-bottom:16px; }
   .kicker { letter-spacing:.32em; font-size:13px; color:var(--muted); font-weight:700; }
   h1 { margin:6px 0 2px; font-size:38px; font-weight:900; letter-spacing:.02em;
     background:linear-gradient(90deg,#ff6a6a,#fff,#6aa8ff);
     -webkit-background-clip:text; background-clip:text; color:transparent; }
   .sub { color:var(--muted); font-size:15px; }
+
+  /* ── Scorebar ── */
   .scorebar { display:flex; align-items:center; justify-content:center; gap:18px;
     margin:14px auto 20px; max-width:640px; }
   .team-badge { flex:1; background:var(--panel); border:1px solid rgba(255,255,255,.08);
     border-radius:14px; padding:14px 16px; display:flex; align-items:center; gap:12px; }
   .team-badge.blue { flex-direction:row-reverse; text-align:end; }
-  .team-badge .dot { width:40px;height:40px;border-radius:50%;flex:none;
-    display:grid;place-items:center;font-weight:900;font-size:17px;color:#fff; }
+  .dot { width:40px; height:40px; border-radius:50%; flex:none;
+    display:grid; place-items:center; font-weight:900; font-size:17px; color:#fff; }
   .team-badge.red  .dot { background:linear-gradient(135deg,#ff7a7a,#dc2626);
     box-shadow:0 0 16px rgba(239,68,68,.7); }
   .team-badge.blue .dot { background:linear-gradient(135deg,#7aa8ff,#2563eb);
     box-shadow:0 0 16px rgba(59,130,246,.7); }
-  .team-badge .tn { font-weight:800; font-size:17px; }
+  .tn { font-weight:800; font-size:17px; }
   .vs { font-weight:900; color:var(--muted); font-size:14px; }
 
+  /* ── Pitch ── */
   .pitch {
     container-type:inline-size; position:relative; width:100%; aspect-ratio:16/9;
     border-radius:18px; overflow:hidden; border:2px solid rgba(255,255,255,.12);
-    background:repeating-linear-gradient(90deg, var(--grassA) 0 10%, var(--grassB) 10% 20%);
+    background:repeating-linear-gradient(90deg,var(--grassA) 0 10%,var(--grassB) 10% 20%);
     box-shadow:0 24px 70px rgba(0,0,0,.55);
   }
   .markings { position:absolute; inset:0; pointer-events:none; }
   .markings .border { position:absolute; inset:16px; border:2px solid var(--line); border-radius:6px; }
-  .markings .half { position:absolute; top:16px; bottom:16px; left:50%; width:2px; background:var(--line); }
+  .markings .half  { position:absolute; top:16px; bottom:16px; left:50%; width:2px; background:var(--line); }
   .markings .circle { position:absolute; top:50%; left:50%; height:42%; aspect-ratio:1;
     transform:translate(-50%,-50%); border:2px solid var(--line); border-radius:50%; }
   .markings .spot { position:absolute; top:50%; left:50%; width:7px; height:7px;
     transform:translate(-50%,-50%); background:var(--line); border-radius:50%; }
   .markings .box { position:absolute; top:50%; transform:translateY(-50%);
     width:11%; height:54%; border:2px solid var(--line); }
-  .markings .box.left { left:16px; border-left:none; }
+  .markings .box.left  { left:16px;  border-left:none; }
   .markings .box.right { right:16px; border-right:none; }
   .markings .six { position:absolute; top:50%; transform:translateY(-50%);
     width:5%; height:30%; border:2px solid var(--line); }
-  .markings .six.left { left:16px; border-left:none; }
+  .markings .six.left  { left:16px;  border-left:none; }
   .markings .six.right { right:16px; border-right:none; }
 
-  .slot { position:absolute; transform:translate(-50%,-50%); z-index:2; }
-
-  /* ---- FUT-style player card ---- */
-  .slot.red  { --c1:#ff8585; --c2:#c81e1e; --edge1:#ffd9d9; --edge2:#7a0f0f;
-               --glow:rgba(239,68,68,.85); }
-  .slot.blue { --c1:#7fb0ff; --c2:#1d52d6; --edge1:#d9e6ff; --edge2:#0c2c78;
-               --glow:rgba(59,130,246,.9); }
-
-  /* shield silhouette: chamfered top corners, straight sides, flat-but-tapered base */
+  /* ── Slots & Cards ── */
+  .slot { position:absolute; transform:translate(-50%,-50%); }
   .card {
-    --shield: polygon(7% 0, 93% 0, 100% 6%, 100% 84%, 84% 100%, 16% 100%, 0 84%, 0 6%);
-    width:14.5cqi; aspect-ratio:83/112; position:relative;
-    clip-path:var(--shield);
-    background:linear-gradient(150deg, var(--edge1) 0%, var(--c1) 26%, var(--c2) 66%, var(--edge2) 100%);
-    filter:drop-shadow(0 0 1cqi var(--glow)) drop-shadow(0 6px 9px rgba(0,0,0,.55));
+    width:11cqi; border-radius:10px 10px 12px 12px;
+    padding:1.4cqi 0 1.4cqi; text-align:center; color:#2a1e05;
+    border:1px solid rgba(0,0,0,.25);
+    background:linear-gradient(160deg,#fceaa0 0%,#e9c65a 42%,#c79a2b 100%);
   }
-  /* inner face sits inside the gold/metal frame */
-  .face {
-    position:absolute; inset:.5cqi; clip-path:var(--shield); overflow:hidden;
-    background:
-      radial-gradient(125% 70% at 50% 16%, rgba(255,255,255,.40), rgba(255,255,255,0) 58%),
-      linear-gradient(162deg, var(--c1) 0%, var(--c2) 64%, #0a0e1a 122%);
+  .card.red  { box-shadow:0 0 26px 7px rgba(239,68,68,.9),  0 8px 16px rgba(0,0,0,.5); }
+  .card.blue { box-shadow:0 0 26px 7px rgba(59,130,246,.95), 0 8px 16px rgba(0,0,0,.5); }
+
+  /* ── Avatar (photo + initials fallback) ── */
+  .avatar {
+    position:relative; width:6.2cqi; height:6.2cqi; margin:.3cqi auto .4cqi;
+    border-radius:50%; overflow:hidden;
+    background:rgba(0,0,0,.16);
+    display:grid; place-items:center;
+    font-weight:900; font-size:2.4cqi; color:rgba(0,0,0,.6);
   }
-  /* faint diagonal sheen for the metallic look */
-  .face::before {
-    content:""; position:absolute; inset:0; pointer-events:none;
-    background:linear-gradient(118deg, rgba(255,255,255,.18) 0 18%, rgba(255,255,255,0) 34%);
-  }
-  /* darken the lower third so the name reads cleanly */
-  .face::after {
-    content:""; position:absolute; left:0; right:0; bottom:0; height:42%; pointer-events:none;
-    background:linear-gradient(to top, rgba(0,0,0,.45), rgba(0,0,0,0));
+  .card.red  .avatar { box-shadow:0 0 0 .35cqi rgba(220,38,38,.5); }
+  .card.blue .avatar { box-shadow:0 0 0 .35cqi rgba(37,99,235,.5); }
+  .avatar img {
+    position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
   }
 
-  /* team mark on the side (upper-left), echoing the FUT info column */
-  .badge {
-    position:absolute; top:6.5%; left:7.5%; z-index:4;
-    width:3.1cqi; height:3.1cqi; border-radius:50%;
-    display:grid; place-items:center; font-weight:900; font-size:1.55cqi; color:#fff;
-    background:linear-gradient(135deg, var(--c1), var(--c2));
-    border:.18cqi solid rgba(255,255,255,.55); box-shadow:0 0 .8cqi var(--glow);
-  }
+  /* ── Name ── */
+  .name { border-top:1px solid rgba(0,0,0,.22); margin:.7cqi 1cqi 0; padding-top:.7cqi;
+    display:flex; flex-direction:column; line-height:1.1; }
+  .fn { font-size:1.35cqi; font-weight:600; opacity:.85; }
+  .sn { font-size:1.8cqi; font-weight:900; letter-spacing:.01em; word-break:break-word; }
 
-  /* player headshot fitted inside the shield */
-  .photo {
-    position:absolute; top:4%; left:5%; width:90%; height:62%; z-index:2;
-    object-fit:contain; object-position:center bottom;
-    filter:drop-shadow(0 3px 5px rgba(0,0,0,.5));
-  }
-  /* fallback shown only if the PNG is missing */
-  .initials {
-    position:absolute; top:4%; left:5%; width:90%; height:62%; z-index:1;
-    display:none; place-items:center; font-weight:900; font-size:6cqi;
-    color:rgba(255,255,255,.85); text-shadow:0 2px 6px rgba(0,0,0,.5);
-  }
-
-  .plate {
-    position:absolute; left:8%; right:8%; bottom:11%; z-index:3; text-align:center;
-    padding-top:.55cqi; border-top:.16cqi solid rgba(255,255,255,.5);
-  }
-  .plate .fn { display:block; font-size:1.35cqi; font-weight:600; letter-spacing:.08em;
-    text-transform:uppercase; color:rgba(255,255,255,.88); }
-  .plate .sn { display:block; font-size:2.05cqi; font-weight:900; line-height:1.05;
-    letter-spacing:.01em; color:#fff; word-break:break-word; text-shadow:0 1px 3px rgba(0,0,0,.55); }
-
+  /* ── Line-up panel ── */
   .lineup { display:flex; gap:16px; margin-top:22px; }
   .lu-col { flex:1; background:var(--panel); border:1px solid rgba(255,255,255,.08);
     border-radius:14px; padding:16px 18px; }
-  .lu-col h3 { margin:0 0 10px; font-size:15px; letter-spacing:.06em; text-transform:uppercase;
-    padding-bottom:8px; border-bottom:2px solid; }
+  .lu-col h3 { font-size:13px; letter-spacing:.08em; text-transform:uppercase;
+    padding-bottom:10px; border-bottom:2px solid; margin-bottom:4px; }
   .lu-col.red  h3 { color:#ff8a8a; border-color:rgba(239,68,68,.5); }
   .lu-col.blue h3 { color:#8ab4ff; border-color:rgba(59,130,246,.5); }
-  .lu-col ul { list-style:none; margin:0; padding:0; }
-  .lu-col li { display:flex; align-items:center; gap:10px; padding:7px 0; font-size:15px;
-    font-weight:600; border-bottom:1px solid rgba(255,255,255,.05); }
+  .lu-col ul { list-style:none; }
+  .lu-col li { display:flex; align-items:center; gap:12px; padding:8px 0;
+    font-size:15px; font-weight:600; border-bottom:1px solid rgba(255,255,255,.05); }
   .lu-col li:last-child { border-bottom:none; }
-  .lu-col .ini { width:30px; height:30px; flex:none; border-radius:50%;
-    display:grid; place-items:center; font-size:12px; font-weight:900; color:#fff; }
-  .lu-col.red  .ini { background:linear-gradient(135deg,#ff8585,#c81e1e); box-shadow:0 0 12px rgba(239,68,68,.6); }
-  .lu-col.blue .ini { background:linear-gradient(135deg,#7fb0ff,#1d52d6); box-shadow:0 0 12px rgba(59,130,246,.65); }
+  .ini {
+    position:relative; width:36px; height:36px; flex:none; border-radius:50%;
+    overflow:hidden; display:grid; place-items:center;
+    font-size:12px; font-weight:900; color:#2a1e05;
+    background:linear-gradient(160deg,#fceaa0,#e9c65a 60%,#c79a2b);
+  }
+  .lu-col.red  .ini { box-shadow:0 0 10px rgba(239,68,68,.7); }
+  .lu-col.blue .ini { box-shadow:0 0 10px rgba(59,130,246,.75); }
+  .ini img {
+    position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+  }
 
   footer { text-align:center; color:var(--muted); font-size:12px; margin-top:20px; }
 </style>
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <div class="kicker">MONDAY NIGHT FOOTBALL</div>
-      <h1>RED vs BLUE</h1>
-      <div class="sub">5-a-side · 8 June 2026</div>
-    </header>
+<div class="wrap">
+  <header>
+    <div class="kicker">MONDAY NIGHT FOOTBALL</div>
+    <h1>RED vs BLUE</h1>
+    <div class="sub">5-a-side · 15 June 2026</div>
+  </header>
 
-    <div class="scorebar">
-      <div class="team-badge red"><div class="dot">R</div><div class="tn">Team Red</div></div>
-      <div class="vs">VS</div>
-      <div class="team-badge blue"><div class="dot">B</div><div class="tn">Team Blue</div></div>
-    </div>
-
-    <div class="pitch">
-      <div class="markings">
-        <div class="border"></div>
-        <div class="half"></div>
-        <div class="circle"></div>
-        <div class="spot"></div>
-        <div class="box left"></div><div class="box right"></div>
-        <div class="six left"></div><div class="six right"></div>
-      </div>
-
-      <div class="slot red" style="top:50%;left:6%;">
-        <div class="card"><div class="face">
-          <div class="badge">R</div>
-          <div class="initials">DT</div>
-          <img class="photo" src="assets/img/darren-tuckett.png" alt="Darren Tuckett"
-               onerror="this.style.display='none';this.closest('.face').querySelector('.initials').style.display='grid';">
-          <div class="plate"><span class="fn">Darren</span><span class="sn">TUCKETT</span></div>
-        </div></div>
-      </div>
-
-      <div class="slot red" style="top:50%;left:19%;">
-        <div class="card"><div class="face">
-          <div class="badge">R</div>
-          <div class="initials">DT</div>
-          <img class="photo" src="assets/img/danny-dale-tucker.png" alt="Danny Dale-Tucker"
-               onerror="this.style.display='none';this.closest('.face').querySelector('.initials').style.display='grid';">
-          <div class="plate"><span class="fn">Danny</span><span class="sn">DALE-TUCKER</span></div>
-        </div></div>
-      </div>
-
-      <div class="slot red" style="top:22%;left:33%;">
-        <div class="card"><div class="face">
-          <div class="badge">R</div>
-          <div class="initials">MW</div>
-          <img class="photo" src="assets/img/matt-whitton.png" alt="Matt Whitton"
-               onerror="this.style.display='none';this.closest('.face').querySelector('.initials').style.display='grid';">
-          <div class="plate"><span class="fn">Matt</span><span class="sn">WHITTON</span></div>
-        </div></div>
-      </div>
-
-      <div class="slot red" style="top:78%;left:33%;">
-        <div class="card"><div class="face">
-          <div class="badge">R</div>
-          <div class="initials">SA</div>
-          <img class="photo" src="assets/img/sam-avery.png" alt="Sam Avery"
-               onerror="this.style.display='none';this.closest('.face').querySelector('.initials').style.display='grid';">
-          <div class="plate"><span class="fn">Sam</span><span class="sn">AVERY</span></div>
-        </div></div>
-      </div>
-
-      <div class="slot red" style="top:50%;left:44%;">
-        <div class="card"><div class="face">
-          <div class="badge">R</div>
-          <div class="initials">CW</div>
-          <img class="photo" src="assets/img/chris-wheeler.png" alt="Chris Wheeler"
-               onerror="this.style.display='none';this.closest('.face').querySelector('.initials').style.display='grid';">
-          <div class="plate"><span class="fn">Chris</span><span class="sn">WHEELER</span></div>
-        </div></div>
-      </div>
-
-      <div class="slot blue" style="top:50%;left:56%;">
-        <div class="card"><div class="face">
-          <div class="badge">B</div>
-          <div class="initials">AG</div>
-          <img class="photo" src="assets/img/andy-green.png" alt="Andy Green"
-               onerror="this.style.display='none';this.closest('.face').querySelector('.initials').style.display='grid';">
-          <div class="plate"><span class="fn">Andy</span><span class="sn">GREEN</span></div>
-        </div></div>
-      </div>
-
-      <div class="slot blue" style="top:22%;left:67%;">
-        <div class="card"><div class="face">
-          <div class="badge">B</div>
-          <div class="initials">MM</div>
-          <img class="photo" src="assets/img/michele-martucci.png" alt="Michele Martucci"
-               onerror="this.style.display='none';this.closest('.face').querySelector('.initials').style.display='grid';">
-          <div class="plate"><span class="fn">Michele</span><span class="sn">MARTUCCI</span></div>
-        </div></div>
-      </div>
-
-      <div class="slot blue" style="top:78%;left:67%;">
-        <div class="card"><div class="face">
-          <div class="badge">B</div>
-          <div class="initials">JP</div>
-          <img class="photo" src="assets/img/jack-preston.png" alt="Jack Preston"
-               onerror="this.style.display='none';this.closest('.face').querySelector('.initials').style.display='grid';">
-          <div class="plate"><span class="fn">Jack</span><span class="sn">PRESTON</span></div>
-        </div></div>
-      </div>
-
-      <div class="slot blue" style="top:50%;left:81%;">
-        <div class="card"><div class="face">
-          <div class="badge">B</div>
-          <div class="initials">DM</div>
-          <img class="photo" src="assets/img/dan-marsh.png" alt="Dan Marsh"
-               onerror="this.style.display='none';this.closest('.face').querySelector('.initials').style.display='grid';">
-          <div class="plate"><span class="fn">Dan</span><span class="sn">MARSH</span></div>
-        </div></div>
-      </div>
-
-      <div class="slot blue" style="top:50%;left:94%;">
-        <div class="card"><div class="face">
-          <div class="badge">B</div>
-          <div class="initials">MH</div>
-          <img class="photo" src="assets/img/michael-hepburn.png" alt="Michael Hepburn"
-               onerror="this.style.display='none';this.closest('.face').querySelector('.initials').style.display='grid';">
-          <div class="plate"><span class="fn">Michael</span><span class="sn">HEPBURN</span></div>
-        </div></div>
-      </div>
-    </div>
-
-    <div class="lineup">
-      <div class="lu-col red"><h3>Team Red</h3><ul><li><span class="ini">DT</span>Darren Tuckett</li><li><span class="ini">DT</span>Danny Dale-Tucker</li><li><span class="ini">MW</span>Matt Whitton</li><li><span class="ini">SA</span>Sam Avery</li><li><span class="ini">CW</span>Chris Wheeler</li></ul></div><div class="lu-col blue"><h3>Team Blue</h3><ul><li><span class="ini">AG</span>Andy Green</li><li><span class="ini">MM</span>Michele Martucci</li><li><span class="ini">JP</span>Jack Preston</li><li><span class="ini">DM</span>Dan Marsh</li><li><span class="ini">MH</span>Michael Hepburn</li></ul></div>
-    </div>
-
-    <footer>Teams balanced for a fair game · Monday Night Football</footer>
+  <div class="scorebar">
+    <div class="team-badge red"><div class="dot">R</div><div class="tn">Team Red</div></div>
+    <div class="vs">VS</div>
+    <div class="team-badge blue"><div class="dot">B</div><div class="tn">Team Blue</div></div>
   </div>
+
+  <div class="pitch">
+    <div class="markings">
+      <div class="border"></div>
+      <div class="half"></div>
+      <div class="circle"></div>
+      <div class="spot"></div>
+      <div class="box left"></div><div class="box right"></div>
+      <div class="six left"></div><div class="six right"></div>
+    </div>
+    <div class="slot" style="top:50%;left:6%;"><div class="card red">
+      <div class="avatar">CW<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/chris-wheeler.png" alt="Chris Wheeler"></div>
+      <div class="name">
+        <span class="fn">Chris</span>
+        <span class="sn">WHEELER</span>
+      </div>
+    </div></div>
+<div class="slot" style="top:50%;left:19%;"><div class="card red">
+      <div class="avatar">AG<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/andy-green.png" alt="Andy Green"></div>
+      <div class="name">
+        <span class="fn">Andy</span>
+        <span class="sn">GREEN</span>
+      </div>
+    </div></div>
+<div class="slot" style="top:22%;left:33%;"><div class="card red">
+      <div class="avatar">DM<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/dan-marsh.png" alt="Dan Marsh"></div>
+      <div class="name">
+        <span class="fn">Dan</span>
+        <span class="sn">MARSH</span>
+      </div>
+    </div></div>
+<div class="slot" style="top:78%;left:33%;"><div class="card red">
+      <div class="avatar">DT<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/danny-dale-tucker.png" alt="Danny Dale-Tucker"></div>
+      <div class="name">
+        <span class="fn">Danny</span>
+        <span class="sn">DALE-TUCKER</span>
+      </div>
+    </div></div>
+<div class="slot" style="top:50%;left:44%;"><div class="card red">
+      <div class="avatar">DT<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/darren-tuckett.png" alt="Darren Tuckett"></div>
+      <div class="name">
+        <span class="fn">Darren</span>
+        <span class="sn">TUCKETT</span>
+      </div>
+    </div></div>
+<div class="slot" style="top:50%;left:56%;"><div class="card blue">
+      <div class="avatar">PM<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/pat-marsh.png" alt="Pat Marsh"></div>
+      <div class="name">
+        <span class="fn">Pat</span>
+        <span class="sn">MARSH</span>
+      </div>
+    </div></div>
+<div class="slot" style="top:22%;left:67%;"><div class="card blue">
+      <div class="avatar">MM<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/michele-martucci.png" alt="Michele Martucci"></div>
+      <div class="name">
+        <span class="fn">Michele</span>
+        <span class="sn">MARTUCCI</span>
+      </div>
+    </div></div>
+<div class="slot" style="top:78%;left:67%;"><div class="card blue">
+      <div class="avatar">JP<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/jack-preston.png" alt="Jack Preston"></div>
+      <div class="name">
+        <span class="fn">Jack</span>
+        <span class="sn">PRESTON</span>
+      </div>
+    </div></div>
+<div class="slot" style="top:50%;left:81%;"><div class="card blue">
+      <div class="avatar">SA<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/sam-avery.png" alt="Sam Avery"></div>
+      <div class="name">
+        <span class="fn">Sam</span>
+        <span class="sn">AVERY</span>
+      </div>
+    </div></div>
+<div class="slot" style="top:50%;left:94%;"><div class="card blue">
+      <div class="avatar">SM</div>
+      <div class="name">
+        <span class="fn">Son</span>
+        <span class="sn">OF MICHELE</span>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="lineup">
+<div class="lu-col red"><h3>Team Red</h3><ul><li><div class="ini">CW<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/chris-wheeler.png" alt="Chris Wheeler"></div>Chris Wheeler</li><li><div class="ini">AG<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/andy-green.png" alt="Andy Green"></div>Andy Green</li><li><div class="ini">DM<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/dan-marsh.png" alt="Dan Marsh"></div>Dan Marsh</li><li><div class="ini">DT<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/danny-dale-tucker.png" alt="Danny Dale-Tucker"></div>Danny Dale-Tucker</li><li><div class="ini">DT<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/darren-tuckett.png" alt="Darren Tuckett"></div>Darren Tuckett</li></ul></div>
+<div class="lu-col blue"><h3>Team Blue</h3><ul><li><div class="ini">PM<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/pat-marsh.png" alt="Pat Marsh"></div>Pat Marsh</li><li><div class="ini">MM<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/michele-martucci.png" alt="Michele Martucci"></div>Michele Martucci</li><li><div class="ini">JP<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/jack-preston.png" alt="Jack Preston"></div>Jack Preston</li><li><div class="ini">SA<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/sam-avery.png" alt="Sam Avery"></div>Sam Avery</li><li><div class="ini">SM</div>Son of Michele</li></ul></div>
+</div>
+
+  <footer>Teams balanced within 9 rating points · Monday Night Football</footer>
+</div>
 </body>
 </html>
