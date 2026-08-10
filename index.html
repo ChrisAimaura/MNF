@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en-GB" dir="ltr">
 <head>
@@ -26,6 +27,12 @@
     background:linear-gradient(90deg,#ff6a6a,#fff,#6aa8ff);
     -webkit-background-clip:text; background-clip:text; color:transparent; }
   .sub { color:var(--muted); font-size:15px; }
+
+  /* ── Fitness notice ── */
+  .notice { max-width:820px; margin:12px auto 4px; padding:10px 14px;
+    background:rgba(255,193,7,.08); border:1px solid rgba(255,193,7,.25);
+    border-radius:10px; color:#ffd77a; font-size:13px; text-align:center; }
+  .notice b { color:#ffe9a8; }
 
   /* ── Scorebar ── */
   .scorebar { display:flex; align-items:center; justify-content:center; gap:18px;
@@ -72,9 +79,20 @@
     padding:1.4cqi 0 1.4cqi; text-align:center; color:#2a1e05;
     border:1px solid rgba(0,0,0,.25);
     background:linear-gradient(160deg,#fceaa0 0%,#e9c65a 42%,#c79a2b 100%);
+    position:relative;
   }
   .card.red  { box-shadow:0 0 26px 7px rgba(239,68,68,.9),  0 8px 16px rgba(0,0,0,.5); }
   .card.blue { box-shadow:0 0 26px 7px rgba(59,130,246,.95), 0 8px 16px rgba(0,0,0,.5); }
+
+  /* ── Fitness flag on card ── */
+  .flag {
+    position:absolute; top:-.5cqi; right:-.5cqi;
+    width:2.4cqi; height:2.4cqi; border-radius:50%;
+    display:grid; place-items:center; font-size:1.4cqi; font-weight:900;
+    background:#c62828; color:#fff; border:.25cqi solid #fff;
+    box-shadow:0 2px 6px rgba(0,0,0,.5);
+  }
+  .flag.warn { background:#f59f00; }
 
   /* ── Avatar (photo + initials fallback) ── */
   .avatar {
@@ -108,6 +126,12 @@
   .lu-col li { display:flex; align-items:center; gap:12px; padding:8px 0;
     font-size:15px; font-weight:600; border-bottom:1px solid rgba(255,255,255,.05); }
   .lu-col li:last-child { border-bottom:none; }
+  .lu-col li .fit {
+    margin-left:auto; display:inline-block; padding:2px 6px; border-radius:5px;
+    font-size:10px; font-weight:900; letter-spacing:.1em;
+    background:rgba(198,40,40,.28); color:#ff9ea1;
+  }
+  .lu-col li .fit.warn { background:rgba(245,159,0,.25); color:#ffd77a; }
   .ini {
     position:relative; width:36px; height:36px; flex:none; border-radius:50%;
     overflow:hidden; display:grid; place-items:center;
@@ -128,8 +152,12 @@
   <header>
     <div class="kicker">MONDAY NIGHT FOOTBALL</div>
     <h1>RED vs BLUE</h1>
-    <div class="sub">5-a-side · 20 July 2026 · Rotating positions</div>
+    <div class="sub">5-a-side · 27 July 2026 · Rotating positions</div>
   </header>
+
+  <div class="notice">
+    <b>Squad watch:</b> Jack Preston 🔴 (knee injury — keep static) · Chris Wheeler 🟠 (under the weather — in goal)
+  </div>
 
   <div class="scorebar">
     <div class="team-badge red"><div class="dot">R</div><div class="tn">Team Red</div></div>
@@ -149,83 +177,108 @@
 
     <!-- ── TEAM RED (left half) — 5 players, evenly spaced ── -->
     <div class="slot" style="top:50%;left:6%;"><div class="card red">
-      <div class="avatar">CW<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/chris-wheeler.png" alt="Chris Wheeler"></div>
-      <div class="name"><span class="fn">Chris</span><span class="sn">WHEELER</span></div>
+      <div class="flag warn" title="Under the weather">!</div>
+      <div class="avatar">CW<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/chris-wheeler.png" alt="Chris Wheeler" onerror="this.style.display='none'"></div>
+      <div class="name">
+        <span class="fn">Chris</span>
+        <span class="sn">WHEELER</span>
+      </div>
     </div></div>
 
     <div class="slot" style="top:22%;left:22%;"><div class="card red">
-      <div class="avatar">MH<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/michael-hepburn.png" alt="Michael Hepburn"></div>
-      <div class="name"><span class="fn">Michael</span><span class="sn">HEPBURN</span></div>
+      <div class="avatar">JB<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/jude-beavis.png" alt="Jude Beavis" onerror="this.style.display='none'"></div>
+      <div class="name">
+        <span class="fn">Jude</span>
+        <span class="sn">BEAVIS</span>
+      </div>
     </div></div>
 
     <div class="slot" style="top:78%;left:22%;"><div class="card red">
-      <div class="avatar">DT<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/darren-tuckett.png" alt="Darren Tuckett"></div>
-      <div class="name"><span class="fn">Darren</span><span class="sn">TUCKETT</span></div>
+      <div class="flag" title="Knee injury — keep static">+</div>
+      <div class="avatar">JP<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/jack-preston.png" alt="Jack Preston" onerror="this.style.display='none'"></div>
+      <div class="name">
+        <span class="fn">Jack</span>
+        <span class="sn">PRESTON</span>
+      </div>
     </div></div>
 
     <div class="slot" style="top:35%;left:40%;"><div class="card red">
-      <div class="avatar">MW<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/matt-whitton.png" alt="Matt Whitton"></div>
-      <div class="name"><span class="fn">Matt</span><span class="sn">WHITTON</span></div>
+      <div class="avatar">SA<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/sam-avery.png" alt="Sam Avery" onerror="this.style.display='none'"></div>
+      <div class="name">
+        <span class="fn">Sam</span>
+        <span class="sn">AVERY</span>
+      </div>
     </div></div>
 
     <div class="slot" style="top:65%;left:40%;"><div class="card red">
-      <div class="avatar">NM<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/nico-martucci.png" alt="Nico Martucci"></div>
-      <div class="name"><span class="fn">Nico</span><span class="sn">MARTUCCI</span></div>
+      <div class="avatar">MH<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/michael-hepburn.png" alt="Michael Hepburn" onerror="this.style.display='none'"></div>
+      <div class="name">
+        <span class="fn">Michael</span>
+        <span class="sn">HEPBURN</span>
+      </div>
     </div></div>
 
     <!-- ── TEAM BLUE (right half) — 5 players, evenly spaced ── -->
     <div class="slot" style="top:35%;left:60%;"><div class="card blue">
-      <div class="avatar">AG<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/andy-green.png" alt="Andy Green"></div>
-      <div class="name"><span class="fn">Andy</span><span class="sn">GREEN</span></div>
+      <div class="avatar">AG<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/andy-green.png" alt="Andy Green" onerror="this.style.display='none'"></div>
+      <div class="name">
+        <span class="fn">Andy</span>
+        <span class="sn">GREEN</span>
+      </div>
     </div></div>
 
     <div class="slot" style="top:65%;left:60%;"><div class="card blue">
-      <div class="avatar">JP<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/jack-preston.png" alt="Jack Preston"></div>
-      <div class="name"><span class="fn">Jack</span><span class="sn">PRESTON</span></div>
+      <div class="avatar">SM<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/stefano-martucci.png" alt="Stefano Martucci" onerror="this.style.display='none'"></div>
+      <div class="name">
+        <span class="fn">Stefano</span>
+        <span class="sn">MARTUCCI</span>
+      </div>
     </div></div>
 
     <div class="slot" style="top:22%;left:78%;"><div class="card blue">
-      <div class="avatar">MM<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/michele-martucci.png" alt="Michele Martucci"></div>
-      <div class="name"><span class="fn">Michele</span><span class="sn">MARTUCCI</span></div>
+      <div class="avatar">MM<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/michele-martucci.png" alt="Michele Martucci" onerror="this.style.display='none'"></div>
+      <div class="name">
+        <span class="fn">Michele</span>
+        <span class="sn">MARTUCCI</span>
+      </div>
     </div></div>
 
     <div class="slot" style="top:78%;left:78%;"><div class="card blue">
-      <div class="avatar">KH<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/kieran-hollingsworth.png" alt="Kieran Hollingsworth"></div>
-      <div class="name"><span class="fn">Kieran</span><span class="sn">HOLLINGSWORTH</span></div>
+      <div class="avatar">DD<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/danny-dale-tucker.png" alt="Danny Dale-Tucker" onerror="this.style.display='none'"></div>
+      <div class="name">
+        <span class="fn">Danny</span>
+        <span class="sn">DALE-TUCKER</span>
+      </div>
     </div></div>
 
     <div class="slot" style="top:50%;left:94%;"><div class="card blue">
-      <div class="avatar">DM<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/dan-marsh.png" alt="Dan Marsh"></div>
-      <div class="name"><span class="fn">Dan</span><span class="sn">MARSH</span></div>
+      <div class="avatar">DM<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/dan-marsh.png" alt="Dan Marsh" onerror="this.style.display='none'"></div>
+      <div class="name">
+        <span class="fn">Dan</span>
+        <span class="sn">MARSH</span>
+      </div>
     </div></div>
   </div>
 
   <div class="lineup">
     <div class="lu-col red"><h3>Team Red</h3><ul>
-      <li><div class="ini">CW<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/chris-wheeler.png" alt="Chris Wheeler"></div>Chris Wheeler</li>
-      <li><div class="ini">MW<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/matt-whitton.png" alt="Matt Whitton"></div>Matt Whitton</li>
-      <li><div class="ini">MH<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/michael-hepburn.png" alt="Michael Hepburn"></div>Michael Hepburn</li>
-      <li><div class="ini">DT<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/darren-tuckett.png" alt="Darren Tuckett"></div>Darren Tuckett</li>
-      <li><div class="ini">NM<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/nico-martucci.png" alt="Nico Martucci"></div>Nico Martucci</li>
+      <li><div class="ini">CW<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/chris-wheeler.png" alt="Chris Wheeler" onerror="this.style.display='none'"></div>Chris Wheeler <span class="fit warn">UNDER WEATHER</span></li>
+      <li><div class="ini">JB<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/jude-beavis.png" alt="Jude Beavis" onerror="this.style.display='none'"></div>Jude Beavis</li>
+      <li><div class="ini">JP<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/jack-preston.png" alt="Jack Preston" onerror="this.style.display='none'"></div>Jack Preston <span class="fit">KNEE</span></li>
+      <li><div class="ini">SA<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/sam-avery.png" alt="Sam Avery" onerror="this.style.display='none'"></div>Sam Avery</li>
+      <li><div class="ini">MH<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/michael-hepburn.png" alt="Michael Hepburn" onerror="this.style.display='none'"></div>Michael Hepburn</li>
     </ul></div>
 
     <div class="lu-col blue"><h3>Team Blue</h3><ul>
-      <li><div class="ini">DM<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/dan-marsh.png" alt="Dan Marsh"></div>Dan Marsh</li>
-      <li><div class="ini">AG<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/andy-green.png" alt="Andy Green"></div>Andy Green</li>
-      <li><div class="ini">MM<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/michele-martucci.png" alt="Michele Martucci"></div>Michele Martucci</li>
-      <li><div class="ini">JP<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/jack-preston.png" alt="Jack Preston"></div>Jack Preston</li>
-      <li><div class="ini">KH<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/kieran-hollingsworth.png" alt="Kieran Hollingsworth"></div>Kieran Hollingsworth</li>
+      <li><div class="ini">DM<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/dan-marsh.png" alt="Dan Marsh" onerror="this.style.display='none'"></div>Dan Marsh</li>
+      <li><div class="ini">AG<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/andy-green.png" alt="Andy Green" onerror="this.style.display='none'"></div>Andy Green</li>
+      <li><div class="ini">MM<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/michele-martucci.png" alt="Michele Martucci" onerror="this.style.display='none'"></div>Michele Martucci</li>
+      <li><div class="ini">SM<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/stefano-martucci.png" alt="Stefano Martucci" onerror="this.style.display='none'"></div>Stefano Martucci</li>
+      <li><div class="ini">DD<img src="https://raw.githubusercontent.com/ChrisAimaura/MNF/main/assets/img/danny-dale-tucker.png" alt="Danny Dale-Tucker" onerror="this.style.display='none'"></div>Danny Dale-Tucker</li>
     </ul></div>
   </div>
 
-  <footer>Even teams · Goalkeepers split · Positions rotate on every goal · Monday Night Football · 20 July 2026</footer>
+  <footer>Even teams · Goalkeepers split · Positions rotate on every goal · Monday Night Football · 27 July 2026</footer>
 </div>
-
-<script>
-  // Hide a player photo if it fails to load, revealing the initials underneath.
-  document.querySelectorAll('.avatar img, .ini img').forEach(function (img) {
-    img.addEventListener('error', function () { this.style.display = 'none'; });
-  });
-</script>
 </body>
 </html>
